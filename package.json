@@ -1,0 +1,33 @@
+{
+  "name": "wxpay-jsapi",
+  "version": "1.0.0",
+  "description": "wxpay 微信支付 js-sdk",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yxz1025/wxpay-jsapi.git"
+  },
+  "keywords": [
+    "weixin",
+    "微信支付",
+    "wxpay",
+    "js-sdk"
+  ],
+  "dependencies": {
+    "q": "1.4.1",
+    "ioredis": "1.15.1",
+    "request": "*",
+    "sha1": "*",
+    "crypto": "*",
+    "ejs": "2.4.1"
+  },
+  "author": "yxz1025",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yxz1025/wxpay-jsapi/issues"
+  },
+  "homepage": "https://github.com/yxz1025/wxpay-jsapi#readme"
+}
