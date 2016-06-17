@@ -1,5 +1,6 @@
-var Q = require("q");
-var request = require("request");
+var Promise = require('bluebird');
+var co = require('co');
+var request = Promise.promisifyAll(require("request"));
 var crypto = require('crypto');
 var ejs = require('ejs');
 var fs = require('fs');
@@ -85,7 +86,7 @@ WxPay.prototype.jsApiSign = function(attach, body, openid, out_trade_no, spbill_
 };
 
 //下单支付
-WxPay.prototype.order = function(attach, body, openid, bookingNo, total_fee, ip) {
+WxPay.prototype.order = co.wrap(function* (attach, body, openid, bookingNo, total_fee, ip) {
 	var self = this;
     var deferred = Q.defer();
     var nonce_str = self.createNonceStr();
@@ -105,32 +106,25 @@ WxPay.prototype.order = function(attach, body, openid, bookingNo, total_fee, ip)
     formData += "<trade_type>JSAPI</trade_type>";
     formData += "<sign>" + self.jsApiSign(attach, body, openid, bookingNo, ip, total_fee, 'JSAPI') + "</sign>";
     formData += "</xml>";
-    request({
-        url: url,
-        method: 'POST',
-        body: formData
-    }, function(err, response, body) {
-        if (!err && response.statusCode == 200) {
-            console.log(body);
-            var prepay_id = self.getXMLNodeValue('prepay_id', body.toString("utf-8"));
-            var tmp = prepay_id.split('[');
-            var tmp1 = tmp[2].split(']');
-            //签名
-            var _paySignjs = self.paysignjs('prepay_id=' + tmp1[0], 'MD5');
-            var args = {
-                appId: appid,
-                timeStamp: timeStamp,
-                nonceStr: nonce_str,
-                signType: "MD5",
-                package: tmp1[0],
-                paySign: _paySignjs
-            };
-            deferred.resolve(args);
-        } else {
-            console.log(body);
-        }
-    });
-    return deferred.promise;
-};
+    var response = yield request.postAsync({url: url, body: formData});
+    if (response.statusCode == 200) {
+        var body = response.body;
+        var prepay_id = self.getXMLNodeValue('prepay_id', body.toString("utf-8"));
+        var tmp = prepay_id.split('[');
+        var tmp1 = tmp[2].split(']');
+        //签名
+        var _paySignjs = self.paysignjs('prepay_id=' + tmp1[0], 'MD5');
+        var args = {
+            appId: self.appid,
+            timeStamp: timeStamp,
+            nonceStr: nonce_str,
+            signType: "MD5",
+            package: tmp1[0],
+            paySign: _paySignjs
+        };
+        return args;      
+    }
+    return false;
+});
 
 module.exports = WxPay;

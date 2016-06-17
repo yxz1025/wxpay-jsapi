@@ -1,7 +1,7 @@
 {
   "name": "wxpay-jsapi",
-  "version": "1.0.0",
-  "description": "wxpay 微信支付 js-sdk",
+  "version": "1.1.0",
+  "description": "wxpay 微信支付 js-sdk 支持generator和promise",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,12 +17,13 @@
     "js-sdk"
   ],
   "dependencies": {
-    "q": "1.4.1",
     "ioredis": "1.15.1",
     "request": "*",
     "sha1": "*",
     "crypto": "*",
-    "ejs": "2.4.1"
+    "ejs": "2.4.1",
+    "bluebird": "3.4.0",
+    "co": "4.6.0"
   },
   "author": "yxz1025",
   "license": "ISC",
