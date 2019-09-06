@@ -1,7 +1,9 @@
 # wxpay-jsapi
 微信支付，wxpay,  jsapi,微信js-sdk 支付koa和express
 
-###如何使用？
+### 如何使用？
+
+```
        var WxPay = require("wxpay-jsapi");
        var opt = {
           appid: "appid",
@@ -19,9 +21,12 @@
        wxpay.order(attach, body, openid, bookingNo, total_fee, ip).then(function(data){
           res.render('wxpay', {args: data});
        });
+       
+```
    
-   
-###页面调用例子
+### 页面调用例子
+
+```
     		<script type="text/javascript">
             var onBridgeReady = function() {
              WeixinJSBridge.invoke('getBrandWCPayRequest', {
@@ -53,3 +58,4 @@
     			// addCharge();
        //      });
     		</script>
+```
